@@ -18,10 +18,10 @@ namespace Catalog.API.Controllers
         private readonly IProductRepository _productRepository;
         private readonly ILogger<CatalogController> _logger;
 
-        public CatalogController(IProductRepository productRepository, ILogger<CatalogController> logger)
+        public CatalogController(IProductRepository repository, ILogger<CatalogController> logger)
         {
-            _productRepository = productRepository;
-            _logger = logger;
+            _productRepository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [HttpGet]
@@ -86,7 +86,7 @@ namespace Catalog.API.Controllers
 
 
 
-        [HttpGet("{id:length(24)}", Name = "DeleteProduct")]
+        [HttpDelete("{id:length(24)}", Name = "DeleteProduct")]
         [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<Product>> DeleteProduct(string id)
         {
